@@ -4,10 +4,12 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
-import { router as user } from "./controller/userController.js"; 
+// import { login, register } from "./controller/userController.js";
+import { feedbackRouter } from "./routers/feedback.js";
+import {authRouter} from "./routers/authRouter.js"; 
 
 const app = express();
-// hgjhg
+
 mongoose.Promise =global.Promise;
 
 const mongodbConnectionString = 'mongodb+srv://manu12shetty:Deyc1DXNoNtbF98f@cluster0.osr1gof.mongodb.net/examsip';
@@ -26,19 +28,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+
+
 app.use((req, res, next) => {
   console.log(`${new Date().toString()}: ${req.method} => ${req.originalUrl}`);
   next();
 });
 
 app.set('trust proxy', true);
-app.use('/feedback', feedbackRouter);
+app.use('/api', feedbackRouter);
 app.get("/", (req, res) => {
   res.send('<a href="/auth/google">Login with Google</a>');
 });
 
 // Routes for authentication
-app.use("/auth", user);
+// app.use("/auth", user);
+app.use("/auth", authRouter); 
 
 const server = http.createServer(app);
 

@@ -1,7 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import { User } from '../database/userDB.js';
+import { login, register } from "../controller/userController.js";
 
+import { router } from '../database/userDB';
 const router = express.Router();
 
 const passwordChecker = async (password) => {
@@ -64,7 +65,7 @@ const login = async (email, password) => {
   }
 };
 
-export { register, login, passwordChecker };
+export { register, login, passwordChecker};
 
 
 

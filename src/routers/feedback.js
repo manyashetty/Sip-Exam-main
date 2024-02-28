@@ -1,6 +1,7 @@
-const express = require('express');
-const multer = require('multer');
-const axios = require('axios');
+// feedback.js
+import express from 'express';
+import multer from 'multer';
+import axios from 'axios';
 
 const feedbackRouter = express.Router();
 const storage = multer.memoryStorage();
@@ -35,4 +36,4 @@ feedbackRouter.post('/submit-feedback', upload.fields([{ name: 'image', maxCount
   }
 });
 
-module.exports = feedbackRouter;
+export { feedbackRouter };

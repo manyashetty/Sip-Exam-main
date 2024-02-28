@@ -1,12 +1,13 @@
-import { login, register } from "../controller/userController";
 import express from "express";
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const router = express.Router();
-require('dotenv').config();
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+// import { login, register } from "../controller/userController";
+// import dotenv from 'dotenv';
+// dotenv.config();
 
+const authRouter = express.Router();
 // register
-router.post("/signup", async(req, res) => {
+authRouter.post("/signup", async(req, res) => {
     try {
         if (req.header('Authorization')) {
             return res.status(500).json({ success: false, message: "User has an active session." })
@@ -20,7 +21,7 @@ router.post("/signup", async(req, res) => {
 
 
 // signin
-router.post("/signin", async(req, res) => {
+authRouter.post("/signin", async(req, res) => {
     try {
         if (req.header('Authorization')) {
             return res.status(500).json({ success: false, message: "User has an active session." })
@@ -33,18 +34,19 @@ router.post("/signin", async(req, res) => {
 });
 
 // Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // Google OAuth Strategy
+
 passport.use(new GoogleStrategy({
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/auth/google/callback"
-    },
-    (accessToken, refreshToken, profile, done) => {
-        return done(null, profile);
-    }
+    clientID: '219345309829-3ppdnncigq3ti8gtj8t5r31end13v2u6.apps.googleusercontent.com',
+    clientSecret: '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',
+    callbackURL: "/auth/google/callback"
+},
+(accessToken, refreshToken, profile, done) => {
+    return done(null, profile);
+}
 ));
 
 // Serialize user
@@ -58,20 +60,24 @@ passport.deserializeUser((user, done) => {
 });
 
 
-app.get('/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] })
+// Google authentication route
+authRouter.get('/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
-app.get('/google/callback',
-    passport.authenticate('google', { failureRedirect: '/' }),
-    (req, res) => {
-        res.redirect('/profile');
-    });
+// Google callback route
+authRouter.get('/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    res.redirect('/profile');
+  });
 
-app.get('/profile', (req, res) => {
-    res.send(`<h1>Welcome ${req.user.displayName}</h1>`);
+// Profile route
+authRouter.get('/profile', (req, res) => {
+  res.send(`<h1>Welcome ${req.user.displayName}</h1>`);
 });
 
-module.exports = (
-    router
-)
+// module.exports = (
+//     router
+// )
+export {authRouter};
