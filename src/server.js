@@ -7,8 +7,8 @@ import mongoose from 'mongoose';
 import { router as user } from "./controller/userController.js"; 
 
 const app = express();
-
-mongoose.Promise = global.Promise;
+// hgjhg
+mongoose.Promise =global.Promise;
 
 const mongodbConnectionString = 'mongodb+srv://manu12shetty:Deyc1DXNoNtbF98f@cluster0.osr1gof.mongodb.net/examsip';
 
