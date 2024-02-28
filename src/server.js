@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.set('trust proxy', true);
-
+app.use('/feedback', feedbackRouter);
 app.get("/", (req, res) => {
   res.send('<a href="/auth/google">Login with Google</a>');
 });
